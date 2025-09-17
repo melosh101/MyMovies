@@ -63,7 +63,7 @@ jobs:
           
           # Create tag name with timestamp and commit hash
           # Use valid Git tag characters (no / or :)
-          TIMESTAMP=$(date +%d-%m-%Y-%H-%M-%S)
+          TIMESTAMP=$(date +%d-%m-%Y--%H-%M-%S)
           TAG_NAME="release-${TIMESTAMP}-${COMMIT_HASH}"
           
           # Get commits since last release (fallback to all commits if no previous release)
