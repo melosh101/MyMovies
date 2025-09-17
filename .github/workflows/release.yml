@@ -34,7 +34,7 @@ jobs:
           # Get the full commit message
           COMMIT_MESSAGE=$(git log -1 --pretty=%B)
           # Use a regular expression to find a tag like 'v1.2.3' in the commit message
-          TAG=$(echo "$COMMIT_MESSAGE" | grep -oP 'v\d+\.\d+\.\d+')
+          TAG="test"
           echo "tag=$TAG" >> $GITHUB_OUTPUT
 
       - name: Create release
