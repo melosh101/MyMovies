@@ -1,6 +1,3 @@
-//go:build dev
-// +build dev
-
 package main
 
 import (
@@ -31,7 +28,7 @@ func main() {
 
 	log.Println("Listening on :8080")
 	handler := mainHandler(mux)
-	err = http.ListenAndServe(":8080", handler)
+	err := http.ListenAndServe(":8080", handler)
 	// err = http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal(err)
