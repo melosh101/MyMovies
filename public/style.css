@@ -1,0 +1,204 @@
+@layer reset, base;
+
+@import url("/reset.css") layer(reset);
+
+
+:root {
+    --color-primary: #3498db;
+    --color-accent: #e74c3c;
+
+    --default-font: "Montserrat", sans-serif;
+    color-scheme: light dark;
+    --color-text: #020202;
+    --color-text-dark: #dedede;
+    --color-background: #FFF;
+    --color-background-dark: #000;
+}
+
+.light {
+    color-scheme: light;
+}
+.dark {
+    color-scheme: dark;
+}
+
+body {
+    transition: background-color .2s ease;
+    background-color: light-dark(var(--color-background), var(--color-background-dark));
+    color: light-dark(var(--color-text), var(--color-text-dark));
+}
+
+header {
+    margin: 2rem 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.menu-icon {
+    width: 24px;
+    & path {
+        fill: light-dark(var(--color-background-dark), var(--color-background));
+    }
+}
+
+.darkmodeSwitch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.darkmodeSwitch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.darkmodeSwitch .slider {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #aaa;
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.darkmodeSwitch .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: light-dark(var(--color-background), var(--color-background-dark));
+    -webkit-transition: .4s;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+.darkmodeSwitch input:checked + .slider {
+    background-color: white;
+}
+
+.darkmodeSwitch input:focus + .slider {
+    box-shadow: 0 0 1px white;
+}
+
+.darkmodeSwitch input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+}
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    & h2 {
+        font-size: 1.5rem;
+        margin: 1rem 0;
+    }
+    a {
+        font-size: .8rem;
+        padding: .4rem .8rem;
+        border-radius: 2rem;
+        border: light-dark(#AAA9B1, #E5E4EA) solid 1px;
+    }
+}
+
+#now-playing {
+    margin: 1rem 2rem;
+    & .now-playing-list {
+        list-style: none;
+        display: flex;
+        flex-direction: row;
+        overflow: auto;
+        scroll-snap-type: both mandatory;
+        overscroll-behavior-x: contain;
+        gap: 2rem;
+        & .movie {
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            max-height: 100%;
+            min-width: 10rem;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+
+            & img {
+                object-fit: cover;
+            }
+            & h2 {
+                font-size: .8rem;
+                font-weight: bolder;
+            }
+            & .original-title {
+                font-size: .6rem;
+            }
+
+        }
+    }
+}
+.movie .original-title {
+    color: gray;
+}
+
+.popular-movies {
+    margin: 0 2rem;
+}
+
+.popular-list {
+    display: flex;
+    list-style: none;
+    flex-direction: column;
+    & .movie {
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        margin: .5rem 0;
+        gap: 1rem;
+
+        & img {
+            object-fit: contain;
+            width: 8rem;
+            border-radius: .5rem;
+        }
+    }
+}
+
+
+@media (width >= 40rem) {
+    .movie-list {
+        grid-template-columns: repeat(2, 1fr);
+
+        & .movie img {
+            height: 30vh;
+        }
+    }
+}
+@media (width >= 48rem) {
+
+}
+@media (width >= 64rem) {
+    .movie-list {
+        grid-template-columns: repeat(3, 1fr);
+
+        & .movie img {
+                height: 30vh;
+        }
+    }
+}
+@media (width >= 80rem) {
+    .movie-list {
+
+        & .movie img {
+            height: 30vh;
+        }
+    }
+}
+@media (width >= 96rem) {
+
+}

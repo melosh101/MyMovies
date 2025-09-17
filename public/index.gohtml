@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.7/dist/htmx.min.js"></script>
+    <script src="/index.js" defer type="module"></script>
+    <title>Document</title>
+</head>
+<body>
+<header>
+    <button>
+        <svg class="menu-icon" viewBox="0 0 16 14" xmlns="http://www.w3.org/2000/svg">
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 0.75C7 0.335786 7.33579 0 7.75 0H15.25C15.6642 0 16 0.335786 16 0.75C16 1.16421 15.6642 1.5 15.25 1.5H7.75C7.33579 1.5 7 1.16421 7 0.75ZM0 6.75C0 6.33579 0.335786 6 0.75 6H15.25C15.6642 6 16 6.33579 16 6.75C16 7.16421 15.6642 7.5 15.25 7.5H0.75C0.335786 7.5 0 7.16421 0 6.75ZM0.75 12C0.335786 12 0 12.3358 0 12.75C0 13.1642 0.335786 13.5 0.75 13.5H8.25C8.66421 13.5 9 13.1642 9 12.75C9 12.3358 8.66421 12 8.25 12H0.75Z"/>
+        </svg>
+    </button>
+    <h1>MyMovies</h1>
+    <label class="darkmodeSwitch">
+        <input type="checkbox" name="darkMode" id="darkmode-switch">
+        <span class="slider"></span>
+    </label>
+</header>
+<main>
+    <section id="now-playing">
+        <div class="section-header">
+            <h2>Now Showing</h2>
+            <a href="/movies/popular">Show more</a>
+        </div>
+        <ul class="now-playing-list">
+            {{/* use the template defined below */}}
+            {{ range .NowPlaying.Films }}
+                <li>
+                    <a href="/movies/{{ .ID }}">
+                        <article class="movie">
+                            <img src="https://image.tmdb.org/t/p/w500{{ .PosterPath }}" alt="">
+                            <div>
+                                <h2>{{ .Title }}</h2>
+                                {{ if ne .OriginalTitle .Title }}
+                                    <p class="original-title">{{ .OriginalTitle }}</p>
+                                {{ end }}
+                            </div>
+                        </article>
+                    </a>
+                </li>
+            {{ end }}
+        </ul>
+    </section>
+    <section class="popular-movies">
+        <div class="section-header">
+            <h2>Popular</h2>
+            <a href="/movies/popular">Show more</a>
+        </div>
+        <ul class="popular-list">
+
+                {{/* loop over the Films in the object passed to the template */}}
+                {{ range .Films }}
+                    <li>
+                        <a href="/movies/{{ .ID }}">
+                            <article class="movie">
+                                <img src="https://image.tmdb.org/t/p/w500{{ .PosterPath }}" alt="">
+                                <div>
+                                    <h2>{{ .Title }}</h2>
+                                    {{ if ne .OriginalTitle .Title }}
+                                        <p class="original-title">{{ .OriginalTitle }}</p>
+                                    {{ end }}
+                                </div>
+                            </article>
+                        </a>
+                    </li>
+                {{ end }}
+        </ul>
+    </section>
+
+</main>
+</body>
+</html>

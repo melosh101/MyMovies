@@ -1,0 +1,69 @@
+name: Release Go Binary
+
+on:
+  push:
+    branches:
+      - main # or master, depending on your default branch
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # This is required to create a release
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.22' # Use the version of Go you need
+
+      - name: Build Go binary
+        run: |
+          # The name of your binary
+          GO_BINARY_NAME="server" 
+          # Build for multiple platforms
+          GOOS=linux GOARCH=amd64 go build -o ${GO_BINARY_NAME}-linux-amd64 .
+          GOOS=windows GOARCH=amd64 go build -o ${GO_BINARY_NAME}-windows-amd64 .
+
+      - name: Get tag from commit message
+        id: get_tag
+        run: |
+          # Get the full commit message
+          COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+          # Use a regular expression to find a tag like 'v1.2.3' in the commit message
+          TAG=$(echo "$COMMIT_MESSAGE" | grep -oP 'v\d+\.\d+\.\d+')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Create release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_tag.outputs.tag }}
+          release_name: Release ${{ steps.get_tag.outputs.tag }}
+          draft: false
+          prerelease: false
+
+      - name: Upload binaries to release
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: 'server-linux-amd64' # Path to your built binary
+          asset_name: 'server-linux-amd64'
+          asset_content_type: application/octet-stream
+
+      - name: Upload Windows binary
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: 'server-windows-amd64'
+          asset_name: 'server-windows-amd64'
+          asset_content_type: application/octet-stream
