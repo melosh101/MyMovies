@@ -5,3 +5,4 @@ test-build
 *.exe
 server-*
 *.sha256
+htmxBackend
