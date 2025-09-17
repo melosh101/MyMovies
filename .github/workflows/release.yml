@@ -62,7 +62,8 @@ jobs:
           COMMIT_MESSAGE=$(git log -1 --pretty=format:'%s')
           
           # Create tag name with timestamp and commit hash
-          TIMESTAMP=$(date +%d/%m/%Y-%H:%M:%S)
+          # Use valid Git tag characters (no / or :)
+          TIMESTAMP=$(date +%d-%m-%Y-%H-%M-%S)
           TAG_NAME="release-${TIMESTAMP}-${COMMIT_HASH}"
           
           # Get commits since last release (fallback to all commits if no previous release)

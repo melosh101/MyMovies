@@ -2,6 +2,7 @@
 
 # Build artifacts
 test-build
-*.exe
 server-*
+test-binary
+*.exe
 *.sha256
