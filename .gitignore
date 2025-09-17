@@ -1,1 +1,6 @@
 /.env
+
+# Build artifacts
+test-build
+*.exe
+server-*
