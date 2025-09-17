@@ -1,3 +1,6 @@
+//go:build dev
+// +build dev
+
 package main
 
 import (
@@ -9,16 +12,9 @@ import (
 	"net/http"
 	url2 "net/url"
 	"strconv"
-
-	"github.com/joho/godotenv"
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal("Error loading .env file")
-		return
-	}
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
