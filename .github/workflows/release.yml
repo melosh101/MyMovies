@@ -26,9 +26,31 @@ jobs:
         run: |
           # The name of your binary
           GO_BINARY_NAME="server" 
+          
+          echo "Building binaries..."
           # Build for multiple platforms
           GOOS=linux GOARCH=amd64 go build -o ${GO_BINARY_NAME}-linux-amd64 .
           GOOS=windows GOARCH=amd64 go build -o ${GO_BINARY_NAME}-windows-amd64.exe .
+          
+          # Verify builds were successful
+          if [ ! -f "${GO_BINARY_NAME}-linux-amd64" ]; then
+            echo "Error: Linux binary build failed"
+            exit 1
+          fi
+          
+          if [ ! -f "${GO_BINARY_NAME}-windows-amd64.exe" ]; then
+            echo "Error: Windows binary build failed"
+            exit 1
+          fi
+          
+          # Generate checksums
+          echo "Generating checksums..."
+          sha256sum ${GO_BINARY_NAME}-linux-amd64 > ${GO_BINARY_NAME}-linux-amd64.sha256
+          sha256sum ${GO_BINARY_NAME}-windows-amd64.exe > ${GO_BINARY_NAME}-windows-amd64.exe.sha256
+          
+          # Display file information
+          echo "Built files:"
+          ls -la ${GO_BINARY_NAME}-*
 
       - name: Generate release info
         id: release_info
@@ -66,6 +88,13 @@ jobs:
             git log ${COMMIT_RANGE} --pretty=format:'- %s (%h)' --reverse >> release_body.md
           fi
           
+          # Add build information
+          echo "" >> release_body.md
+          echo "## Build Information" >> release_body.md
+          echo "- **Go Version:** $(go version | cut -d' ' -f3)" >> release_body.md
+          echo "- **Build Date:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> release_body.md
+          echo "- **Commit:** ${COMMIT_HASH}" >> release_body.md
+          
           # Set outputs
           echo "tag_name=${TAG_NAME}" >> $GITHUB_OUTPUT
           echo "release_name=${COMMIT_MESSAGE}" >> $GITHUB_OUTPUT
@@ -89,3 +118,5 @@ jobs:
           files: |
             server-linux-amd64
             server-windows-amd64.exe
+            server-linux-amd64.sha256
+            server-windows-amd64.exe.sha256
