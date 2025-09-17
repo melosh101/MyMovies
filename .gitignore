@@ -4,3 +4,4 @@
 test-build
 *.exe
 server-*
+*.sha256
